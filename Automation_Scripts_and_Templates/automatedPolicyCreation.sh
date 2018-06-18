@@ -102,6 +102,20 @@ while [  $count -lt $app_count ]; do
 	appFileName="${get_appFileName[$count]}"
 	appVersion="${get_appVersion[$count]}"
 
+	########################################
+	# Creates Category if it Doesn't Exist #
+	########################################
+	touch ~/Desktop/category.xml
+	
+	XML="<category><name>"
+	XML+=${category}
+	XML+="</name></category>"
+	echo "${XML}" | xmllint --format - > ~/Desktop/category.xml
+
+	/usr/bin/curl -k -s  $jssUrl/JSSResource/categories/id/0 --user $jssUsername:$jssPassword -T ~/Desktop/category.xml -X POST
+
+	rm -R ~/Desktop/category.xml
+	
 	#################################
 	# Creates Installed Smart Group #
 	#################################
