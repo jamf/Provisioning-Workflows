@@ -12,3 +12,5 @@ Automation_Scripts_and_Templates Folder:
 * Script that automates the production of Smart Groups and Policies based on Applications
 * CSV Templates
 * Screenshots
+
+Stay tuned for more resources and additional workflows!
