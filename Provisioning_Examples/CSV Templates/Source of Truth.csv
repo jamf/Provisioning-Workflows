@@ -1,0 +1,12 @@
+Item,Category,Installer Type,OS Restrictions
+Google Chrome,Application,Script or .pkg,
+Google Chrome Settings,Customization,.dmg,
+Firefox,Application,Script or .pkg,
+Firefox Homepage,Customization,.dmg,
+Location Services,Setting,Script,
+VPN,Setting,Configuration Profile,
+Adobe Flash,Application,Script or .pkg,
+Java,Application,.pkg,
+Slack,Application,Script or .pkg or Mac App Store,
+Office For Mac,Application,.pkg,
+Photoshop,Application,.pkg,
