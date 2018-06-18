@@ -2,7 +2,7 @@
 
 Imaging is dead...now what?
 
-These templates and examples will help you create a provisioning workflow for both new and re-purposed computers, and in many scenarios.
+These templates and examples will help you create a provisioning workflow for both new and re-purposed computers, to be used in many different scenarios.
 
 Provisioning_Examples Folder:
 * Thin-imaging/provisioning scripts
