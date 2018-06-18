@@ -101,7 +101,11 @@ while [  $count -lt $app_count ]; do
 	category="${get_category[$count]}"
 	appFileName="${get_appFileName[$count]}"
 	appVersion="${get_appVersion[$count]}"
-
+	
+	rm -R ~/Desktop/group.xml
+	rm -R ~/Desktop/policy.xml
+	rm -R ~/Desktop/category.xml
+	
 	########################################
 	# Creates Category if it Doesn't Exist #
 	########################################
@@ -132,7 +136,7 @@ while [  $count -lt $app_count ]; do
 
 	/usr/bin/curl -k -s  $jssUrl/JSSResource/computergroups/id/0 --user $jssUsername:$jssPassword -T ~/Desktop/group.xml -X POST
 
-	rm -R ~/Desktop/policy.xml
+	rm -R ~/Desktop/group.xml
 
 	##################################
 	# Creates Up-to-date Smart Group #
@@ -152,7 +156,7 @@ while [  $count -lt $app_count ]; do
 
 	/usr/bin/curl -k -s  $jssUrl/JSSResource/computergroups/id/0 --user $jssUsername:$jssPassword -T ~/Desktop/group.xml -X POST
 
-	rm -R ~/Desktop/policy.xml
+	rm -R ~/Desktop/group.xml
 
 	###########################
 	# Creates App Main Policy #
