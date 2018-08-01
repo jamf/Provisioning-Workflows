@@ -34,7 +34,7 @@
 # 
 ####################################################################################################
 
-echo "Beginning provisioning process"
+/bin/echo "Beginning provisioning process"
 
 # Configures Location services
 /usr/local/jamf/bin/jamf policy -trigger provision_locationservices
@@ -66,4 +66,4 @@ echo "Beginning provisioning process"
 # Installs Adobe Photoshop
 /usr/local/jamf/bin/jamf policy -trigger provision_photoshop
 
-echo "Provisioning complete"
+/bin/echo "Provisioning complete"
