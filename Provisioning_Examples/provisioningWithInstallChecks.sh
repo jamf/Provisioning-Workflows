@@ -39,7 +39,7 @@
 # Creates Provisioning Log File #
 #################################
 log=~/Desktop/log.txt
-touch $log
+/usr/bin/touch $log
 
 #################################
 # Promts User For Computer Name #
@@ -53,9 +53,9 @@ ENDofOSAscript
 ####################################
 # Makes all characters capitalized #
 ####################################
-compName=$(echo $compName | tr [a-z] [A-Z]); 
+compName=$(/bin/echo $compName | tr [a-z] [A-Z]); 
 new_hostname=$compName 
-echo "Changed computer names to: $new_hostname"
+/bin/echo "Changed computer names to: $new_hostname"
 
 ##############################
 # Jamf Helper Popup Window 1 #
@@ -65,15 +65,15 @@ echo "Changed computer names to: $new_hostname"
 ###################################
 # Sets local computer to new name #
 ###################################
-scutil --set HostName $new_hostname
-scutil --set ComputerName $new_hostname
-scutil --set LocalHostName $new_hostname
+/usr/sbin/scutil --set HostName $new_hostname
+/usr/sbin/scutil --set ComputerName $new_hostname
+/usr/sbin/scutil --set LocalHostName $new_hostname
 
 ####################################
 # First Recon to set Computer Name #
 ####################################
-echo "Running recon"
-jamf recon
+/bin/echo "Running recon"
+/usr/local/jamf/bin/jamf recon
 
 #####################
 # Stops Jamf Helper #
@@ -85,10 +85,10 @@ killAll jamfHelper
 ###################################
 # Writes data to provisioning log #
 ###################################
-echo "
+/bin/echo "
 Build 1a" >> $log
 dateStamp=$( date "+%a %b %d %H:%M:%S" )
-echo "
+/bin/echo "
 Imaging started at $dateStamp
 " >> $log
 
@@ -96,45 +96,45 @@ Imaging started at $dateStamp
 # Custom triggered policies begin #
 ###################################
 
-echo "Installing Google Chrome"
+/bin/echo "Installing Google Chrome"
 /usr/local/jamf/bin/jamf policy -trigger provision_googlechrome -verbose
 chrome_version=$(mdls -name kMDItemVersion /Applications/Google\ Chrome.app | cut -c 19- | rev | cut -c 2- | rev)
 if [[ $chrome_version == *"could not find"* ]]; then
 	# App is not installed
-	echo "Google Chrome install FAILED" >> $log
+	/bin/echo "Google Chrome install FAILED" >> $log
 else
 	# App is installed
-	echo "Google Chrome $chrome_version Installed Successfully" >> $log
+	/bin/echo "Google Chrome $chrome_version Installed Successfully" >> $log
 fi
 
-echo "Installing Firefox"
+/bin/echo "Installing Firefox"
 /usr/local/jamf/bin/jamf policy -trigger provision_firefox -verbose
 firefox_version=$(mdls -name kMDItemVersion /Applications/Firefox.app | cut -c 19- | rev | cut -c 2- | rev)
 if [[ $firefox_version == *"could not find"* ]]; then
 	# App is not installed
-	echo "Firefox install FAILED" >> $log
+	/bin/echo "Firefox install FAILED" >> $log
 else
 	# App is installed
-	echo "Firefox $firefox_version Installed Successfully" >> $log
+	/bin/echo "Firefox $firefox_version Installed Successfully" >> $log
 fi
 
-echo "Installing BlueCoat"
+/bin/echo "Installing BlueCoat"
 /usr/local/jamf/bin/jamf policy -trigger bluecoat -verbose
 bluecoat_version=$(sudo launchctl list | grep -i com.bluecoat.ua)
-echo $bluecoat_version
+/bin/echo $bluecoat_version
 if [[ $bluecoat_version == "" ]]; then
 	# App is not installed
-	echo "BlueCoat install FAILED" >> $log
+	/bin/echo "BlueCoat install FAILED" >> $log
 else
 	# App is installed
-	echo "BlueCoat Installed Successfully" >> $log
+	/bin/echo "BlueCoat Installed Successfully" >> $log
 fi
 
 ##############################
 # Completes imaging log file #
 ##############################
 dateStamp=$( date "+%a %b %d %H:%M:%S" )
-echo "
+/bin/echo "
 Provisioning completed at $dateStamp
 " >> $log
 
