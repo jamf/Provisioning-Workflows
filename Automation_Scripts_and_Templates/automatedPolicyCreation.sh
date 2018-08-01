@@ -71,7 +71,7 @@ csvFile=''
 # Finds number of apps in csv #
 ###############################
 csv_lines=()
-csv_lines+=$(cat $csvFile | awk '{n+=1} END {print n}')
+csv_lines+=$(/bin/cat $csvFile | awk '{n+=1} END {print n}')
 let app_count=$csv_lines-1
 
 ########################################################
@@ -102,28 +102,28 @@ while [  $count -lt $app_count ]; do
 	appFileName="${get_appFileName[$count]}"
 	appVersion="${get_appVersion[$count]}"
 	
-	rm -R ~/Desktop/group.xml
-	rm -R ~/Desktop/policy.xml
-	rm -R ~/Desktop/category.xml
+	/bin/rm -R ~/Desktop/group.xml
+	/bin/rm -R ~/Desktop/policy.xml
+	/bin/rm -R ~/Desktop/category.xml
 	
 	########################################
 	# Creates Category if it Doesn't Exist #
 	########################################
-	touch ~/Desktop/category.xml
+	/usr/bin/touch ~/Desktop/category.xml
 	
 	XML="<category><name>"
 	XML+=${category}
 	XML+="</name></category>"
-	echo "${XML}" | xmllint --format - > ~/Desktop/category.xml
+	/bin/echo "${XML}" | xmllint --format - > ~/Desktop/category.xml
 
 	/usr/bin/curl -k -s  $jssUrl/JSSResource/categories/id/0 --user $jssUsername:$jssPassword -T ~/Desktop/category.xml -X POST
 
-	rm -R ~/Desktop/category.xml
+	/bin/rm -R ~/Desktop/category.xml
 	
 	#################################
 	# Creates Installed Smart Group #
 	#################################
-	touch ~/Desktop/group.xml
+	/usr/bin/touch ~/Desktop/group.xml
 
 	installedName=${fullAppName}" - Installed"
 
@@ -132,16 +132,16 @@ while [  $count -lt $app_count ]; do
 	XML+="</name><is_smart>true</is_smart><criteria><size>1</size><criterion><name>Application Title</name><priority>0</priority><and_or>and</and_or><search_type>has</search_type><value>"
 	XML+=${appFileName}
 	XML+="</value><opening_paren>false</opening_paren><closing_paren>false</closing_paren></criterion></criteria></computer_group>"
-	echo "${XML}" | xmllint --format - > ~/Desktop/group.xml
+	/bin/echo "${XML}" | xmllint --format - > ~/Desktop/group.xml
 
 	/usr/bin/curl -k -s  $jssUrl/JSSResource/computergroups/id/0 --user $jssUsername:$jssPassword -T ~/Desktop/group.xml -X POST
 
-	rm -R ~/Desktop/group.xml
+	/bin/rm -R ~/Desktop/group.xml
 
 	##################################
 	# Creates Up-to-date Smart Group #
 	##################################
-	touch ~/Desktop/group.xml
+	/usr/bin/touch ~/Desktop/group.xml
 
 	latestName=${fullAppName}" - Latest"
 
@@ -152,19 +152,19 @@ while [  $count -lt $app_count ]; do
 	XML+="</value><opening_paren>false</opening_paren><closing_paren>false</closing_paren></criterion><criterion><name>Application Version</name><priority>1</priority><and_or>and</and_or><search_type>is</search_type><value>"
 	XML+=${appVersion}
 	XML+="</value><opening_paren>false</opening_paren><closing_paren>false</closing_paren></criterion></criteria></computer_group>"
-	echo "${XML}" | xmllint --format - > ~/Desktop/group.xml
+	/bin/echo "${XML}" | xmllint --format - > ~/Desktop/group.xml
 
 	/usr/bin/curl -k -s  $jssUrl/JSSResource/computergroups/id/0 --user $jssUsername:$jssPassword -T ~/Desktop/group.xml -X POST
 
-	rm -R ~/Desktop/group.xml
+	/bin/rm -R ~/Desktop/group.xml
 
 	###########################
 	# Creates App Main Policy #
 	###########################
-	touch ~/Desktop/policy.xml
+	/usr/bin/touch ~/Desktop/policy.xml
 
 	mainPolicyName="Main - "$fullAppName
-	formattedAppName=$(echo $singleStringAppName | tr [A-Z] [a-z])
+	formattedAppName=$(/bin/echo $singleStringAppName | tr [A-Z] [a-z])
 	mainPolicyTrigger="main_"$formattedAppName
 
 	XML="<policy><general><name>"
@@ -173,16 +173,16 @@ while [  $count -lt $app_count ]; do
 	XML+=${mainPolicyTrigger}
 	XML+="</trigger_other><frequency>Ongoing</frequency><location_user_only>false</location_user_only><target_drive>/</target_drive><offline>false</offline><category><name>Main Policies</name></category></general><scope><all_computers>true</all_computers></scope>"
 	XML+="<maintenance><recon>true</recon><reset_name>false</reset_name><install_all_cached_packages>false</install_all_cached_packages><heal>false</heal><prebindings>false</prebindings><permissions>false</permissions><byhost>false</byhost><system_cache>false</system_cache><user_cache>false</user_cache><verify>false</verify></maintenance></policy>"
-	echo "${XML}" | xmllint --format - > ~/Desktop/policy.xml
+	/bin/echo "${XML}" | xmllint --format - > ~/Desktop/policy.xml
 
 	/usr/bin/curl -k -s  $jssUrl/JSSResource/policies/id/0 --user $jssUsername:$jssPassword -T ~/Desktop/policy.xml -X POST
 
-	rm -R ~/Desktop/policy.xml
+	/bin/rm -R ~/Desktop/policy.xml
 
 	#######################################
 	# Creates Self Service Install Policy #
 	#######################################
-	touch ~/Desktop/policy.xml
+	/usr/bin/touch ~/Desktop/policy.xml
 
 	installPolicyName=$fullAppName
 	installPolicyTrigger=$(echo $singleStringAppName | tr [A-Z] [a-z])
@@ -197,16 +197,16 @@ while [  $count -lt $app_count ]; do
 	XML+="<files_processes><search_by_path/><delete_file>false</delete_file><locate_file/><update_locate_database>false</update_locate_database><spotlight_search/><search_for_process/><kill_process>false</kill_process><run_command>jamf policy -trigger "
 	XML+=${mainPolicyTrigger}
 	XML+="</run_command></files_processes></policy>"
-	echo "${XML}" | xmllint --format - > ~/Desktop/policy.xml
+	/bin/echo "${XML}" | xmllint --format - > ~/Desktop/policy.xml
 
 	/usr/bin/curl -k -s  $jssUrl/JSSResource/policies/id/0 --user $jssUsername:$jssPassword -T ~/Desktop/policy.xml -X POST
 
-	rm -R ~/Desktop/policy.xml
+	/bin/rm -R ~/Desktop/policy.xml
 
 	#######################################
 	# Creates Self Service Update Policy #
 	#######################################
-	touch ~/Desktop/policy.xml
+	/usr/bin/touch ~/Desktop/policy.xml
 	updatePolicyName=$fullAppName" - Update"
 
 	XML="<policy><general><name>"
@@ -221,16 +221,16 @@ while [  $count -lt $app_count ]; do
 	XML+="<files_processes><search_by_path/><delete_file>false</delete_file><locate_file/><update_locate_database>false</update_locate_database><spotlight_search/><search_for_process/><kill_process>false</kill_process><run_command>jamf policy -trigger "
 	XML+=${mainPolicyTrigger}
 	XML+="</run_command></files_processes></policy>"
-	echo "${XML}" | xmllint --format - > ~/Desktop/policy.xml
+	/bin/echo "${XML}" | xmllint --format - > ~/Desktop/policy.xml
 
 	/usr/bin/curl -k -s  $jssUrl/JSSResource/policies/id/0 --user $jssUsername:$jssPassword -T ~/Desktop/policy.xml -X POST
 
-	rm -R ~/Desktop/policy.xml
+	/binrm -R ~/Desktop/policy.xml
 
 	###############################
 	# Creates Provisioning Policy #
 	###############################
-	touch ~/Desktop/policy.xml
+	/usr/bin/touch ~/Desktop/policy.xml
 	enrollmentPolicyName="Provision - "$fullAppName
 	enrollPolicyTrigger="provision_"$formattedAppName
 
@@ -244,11 +244,11 @@ while [  $count -lt $app_count ]; do
 	XML+="<files_processes><search_by_path/><delete_file>false</delete_file><locate_file/><update_locate_database>false</update_locate_database><spotlight_search/><search_for_process/><kill_process>false</kill_process><run_command>jamf policy -trigger "
 	XML+=${mainPolicyTrigger}
 	XML+="</run_command></files_processes></policy>"
-	echo "${XML}" | xmllint --format - > ~/Desktop/policy.xml
+	/binecho "${XML}" | xmllint --format - > ~/Desktop/policy.xml
 
 	/usr/bin/curl -k -s  $jssUrl/JSSResource/policies/id/0 --user $jssUsername:$jssPassword -T ~/Desktop/policy.xml -X POST
 
-	rm -R ~/Desktop/policy.xml
+	/bin/rm -R ~/Desktop/policy.xml
 
 	let count=count+1
 done
