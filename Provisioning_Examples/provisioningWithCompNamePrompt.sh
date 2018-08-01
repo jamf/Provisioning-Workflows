@@ -39,7 +39,7 @@
 # Creates Provisioning Log File #
 #################################
 log=~/Desktop/log.txt
-touch $log
+/usr/bin/touch $log
 
 #################################
 # Promts User For Computer Name #
@@ -53,20 +53,20 @@ ENDofOSAscript
 #################################
 # Makes all letters capitalized #
 #################################
-code=$(echo $computerName | tr [a-z] [A-Z])
+code=$(/bin/echo $computerName | tr [a-z] [A-Z])
 
 #################################
 # Newly generated computer name #
 #################################
 new_hostname=$code 
-echo "Changed computer names to: $new_hostname"
+/bin/echo "Changed computer names to: $new_hostname"
 
 ###################################
 # Sets local computer to new name #
 ###################################
-scutil --set HostName $new_hostname
-scutil --set ComputerName $new_hostname
-scutil --set LocalHostName $new_hostname
+/usr/sbin/scutil --set HostName $new_hostname
+/usr/sbin/scutil --set ComputerName $new_hostname
+/usr/sbin/scutil --set LocalHostName $new_hostname
 
 ##############################
 # Jamf Helper Popup Window 1 #
@@ -76,8 +76,8 @@ scutil --set LocalHostName $new_hostname
 ####################################
 # First Recon to set Computer Name #
 ####################################
-echo "Running recon"
-jamf recon
+/bin/echo "Running recon"
+/usr/local/jamf/bin/jamf recon
 
 #####################
 # Stops Jamf Helper #
@@ -92,56 +92,57 @@ killAll jamfHelper
 ##############################
 # Writes data to imaging log #
 ##############################
-echo "
+/bin/echo "
 Build 1a" >> $log
 dateStamp=$( date "+%a %b %d %H:%M:%S" )
-echo "
+/bin/echo "
 Imaging started at $dateStamp
 " >> $log
 computerid=`/usr/sbin/scutil --get LocalHostName`
 localusername=`whoami`
-echo "Current user: "$localusername >> $log
-echo "Current computer name: "$computerid >> $log
+/bin/echo "Current user: "$localusername >> $log
+/bin/echo "Current computer name: "$computerid >> $log
 
 ###################################
 # Custom triggered policies begin #
 ###################################
 
 /usr/local/jamf/bin/jamf policy -trigger provision_locationservices -verbose
-echo "Location Services Configured Successfully" >> $log
+
+/bin/echo "Location Services Configured Successfully" >> $log
 
 /usr/local/jamf/bin/jamf policy -trigger provision_googlechrome -verbose
-echo "Google Chrome Installed Successfully" >> $log
+/bin/echo "Google Chrome Installed Successfully" >> $log
 
 /usr/local/jamf/bin/jamf policy -trigger provision_settings_googlechrome -verbose
-echo "Configured Google Chrome Settings Successfully" >> $log
+/bin/echo "Configured Google Chrome Settings Successfully" >> $log
 
 /usr/local/jamf/bin/jamf policy -trigger provision_flash -verbose
-echo "Adobe Flash Player Installed Successfully" >> $log
+/bin/echo "Adobe Flash Player Installed Successfully" >> $log
 
 /usr/local/jamf/bin/jamf policy -trigger provision_java -verbose
-echo "Java Installed Successfully" >> $log
+/bin/echo "Java Installed Successfully" >> $log
 
 /usr/local/jamf/bin/jamf policy -trigger provision_firefox -verbose
-echo "Firefox Installed Successfully" >> $log
+/bin/echo "Firefox Installed Successfully" >> $log
 
 /usr/local/jamf/bin/jamf policy -trigger provision_settings_firefox_homepage -verbose
-echo "Configured Firefox Hompage Successfully" >> $log
+/bin/echo "Configured Firefox Hompage Successfully" >> $log
 
 /usr/local/jamf/bin/jamf policy -trigger provision_slack -verbose
-echo "Slack Installed Successfully" >> $log
+/bin/echo "Slack Installed Successfully" >> $log
 
 /usr/local/jamf/bin/jamf policy -trigger provision_msoffice -verbose
-echo "Microsoft Office 2016 Installed Successfully" >> $log
+/bin/echo "Microsoft Office 2016 Installed Successfully" >> $log
 
 /usr/local/jamf/bin/jamf policy -trigger provision_photoshop -verbose
-echo "Photoshop Installed Successfully" >> $log
+/bin/echo "Photoshop Installed Successfully" >> $log
 
 ##############################
 # Completes imaging log file #
 ##############################
 dateStamp=$( date "+%a %b %d %H:%M:%S" )
-echo "
+/bin/echo "
 Imaging completed at $dateStamp
 " >> $log
 
